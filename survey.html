@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رأيك في Blendo · Blendo Survey</title>
+<meta name="description" content="شاركنا رأيك في تطبيق Blendo IPTV Player — Tell us what you think about Blendo IPTV Player.">
+<meta name="theme-color" content="#0e022d">
+<meta property="og:title" content="رأيك يفرق معانا · Blendo">
+<meta property="og:description" content="جرّبت Blendo؟ قولّنا رأيك في دقيقتين وساعدنا نوصل لأفضل أداء.">
+<meta property="og:image" content="https://blendo-iptv.github.io/assets/logo.webp">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<style>
+  :root{
+    --bg:#0e022d; --bg2:#1d0548; --deep:#07011a;
+    --fg:#f4f1ff; --muted:#b9aed8; --line:rgba(255,255,255,.12); --glass:rgba(255,255,255,.055);
+    --violet:#7b2fff; --pink:#fc58b8; --cyan:#22d3ee; --blue:#1e6ff0; --good:#3ee6a8; --warn:#ffb547;
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;min-height:100vh;color:var(--fg);background:var(--bg);
+    background-image:
+      radial-gradient(900px 520px at 50% -8%, var(--bg2), transparent 70%),
+      radial-gradient(520px 420px at 108% 30%, rgba(252,88,184,.20), transparent 70%),
+      radial-gradient(520px 420px at -8% 75%, rgba(34,211,238,.12), transparent 70%);
+    background-attachment:fixed;
+    font:16px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Tahoma,sans-serif;
+    -webkit-tap-highlight-color:transparent}
+  [lang="en"] body, body.en{direction:ltr}
+  main{max-width:760px;margin:0 auto;padding:22px 16px 64px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .top a{color:var(--fg)}
+  .top img{height:34px;width:auto}
+  .lang{font:inherit;font-size:14px;font-weight:700;color:var(--fg);background:#1c0f40;border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;cursor:pointer}
+  .lang:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,label.chip:focus-within,.stars:focus-within{outline:2px solid var(--cyan);outline-offset:3px}
+
+  /* hero */
+  .hero{position:relative;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin:26px 0 18px}
+  .hero h1{margin:0;font-size:clamp(26px,6vw,40px);line-height:1.2;font-weight:900;letter-spacing:-.01em}
+  .hero h1 span{background:linear-gradient(90deg,var(--pink),var(--violet) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{margin:10px 0 0;color:var(--muted);max-width:46ch}
+  .mascot{width:clamp(110px,24vw,170px);height:auto;filter:drop-shadow(0 18px 30px rgba(123,47,255,.45));
+    animation:float 4s ease-in-out infinite;transform-origin:50% 90%}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+  .progress{height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin:6px 0 18px}
+  .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));transition:width .4s ease}
+
+  /* cards */
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:14px 0;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .card h2{margin:0 0 4px;font-size:17px;font-weight:800}
+  .card .hint{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .num{display:inline-grid;place-items:center;width:26px;height:26px;margin-inline-end:8px;border-radius:9px;
+    background:linear-gradient(135deg,var(--violet),var(--pink));font-size:13px;font-weight:900;vertical-align:middle}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  label.chip{position:relative;display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
+    padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-weight:600;font-size:15px;
+    transition:background .15s,border-color .15s,transform .1s}
+  label.chip:active{transform:scale(.97)}
+  label.chip input{position:absolute;opacity:0;pointer-events:none}
+  label.chip:has(input:checked){background:linear-gradient(135deg,rgba(123,47,255,.45),rgba(252,88,184,.35));border-color:transparent}
+
+  /* stars */
+  .rate-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+  .rate-row:first-of-type{border-top:0}
+  .rate-row span{font-weight:600;font-size:15px}
+  .rate-row small{display:block;color:var(--muted);font-weight:400;font-size:12.5px}
+  .stars{display:inline-flex;flex-direction:row-reverse;gap:2px;border-radius:10px}
+  body.en .stars{flex-direction:row-reverse}
+  .stars input{position:absolute;opacity:0;width:1px;height:1px}
+  .stars label{cursor:pointer;font-size:26px;line-height:1;color:rgba(255,255,255,.18);transition:color .12s,transform .12s;padding:2px}
+  .stars label:hover,.stars label:hover~label,.stars input:checked~label{color:#ffd166}
+  .stars label:active{transform:scale(1.25)}
+  .na{font-size:12px;color:var(--muted);cursor:pointer;margin-inline-start:6px;white-space:nowrap}
+  .na input{accent-color:var(--violet)}
+
+  /* nps */
+  .nps{display:grid;grid-template-columns:repeat(11,1fr);gap:5px}
+  .nps label{position:relative}
+  .nps input{position:absolute;opacity:0}
+  .nps span{display:grid;place-items:center;height:40px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-weight:800;cursor:pointer;font-size:14px}
+  .nps input:checked+span{background:linear-gradient(135deg,var(--violet),var(--cyan));border-color:transparent}
+  .nps-legend{display:flex;justify-content:space-between;color:var(--muted);font-size:12.5px;margin-top:6px}
+
+  textarea,input[type=text],input[type=email]{width:100%;font:inherit;color:var(--fg);background:rgba(0,0,0,.25);border:1px solid var(--line);
+    border-radius:14px;padding:12px 14px;resize:vertical}
+  textarea{min-height:96px}
+  ::placeholder{color:#8c82ad}
+
+  .aware{border-color:rgba(34,211,238,.35);background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(123,47,255,.08))}
+  .aware b{color:var(--cyan)}
+  .hide{display:none}
+
+  .submit{width:100%;margin-top:8px;font:inherit;font-size:18px;font-weight:900;color:#fff;border:0;border-radius:16px;padding:16px;cursor:pointer;
+    background:linear-gradient(90deg,var(--violet),var(--pink));box-shadow:0 14px 30px rgba(252,88,184,.25);transition:transform .1s,filter .2s}
+  .submit:active{transform:scale(.98)}
+  .submit[disabled]{filter:grayscale(.6) brightness(.8);cursor:wait}
+  .err{color:var(--warn);font-weight:700;margin:10px 0 0;min-height:1em}
+  .fine{color:var(--muted);font-size:12.5px;text-align:center;margin-top:12px}
+  .fine a{color:var(--fg)}
+  .hp{position:absolute;inset-inline-start:0;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;clip-path:inset(50%)}
+
+  /* thanks */
+  .thanks{text-align:center;padding:30px 8px}
+  .thanks img{width:180px;animation:wink 1.2s ease 1}
+  @keyframes wink{0%{transform:scale(.6) rotate(-10deg);opacity:0}60%{transform:scale(1.08) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+  .thanks h2{font-size:28px;margin:10px 0 6px}
+  .thanks p{color:var(--muted);margin:0 auto;max-width:42ch}
+  .play{display:inline-block;margin-top:18px;padding:12px 22px;border-radius:999px;background:#1c0f40;border:1px solid var(--line);color:var(--fg);text-decoration:none;font-weight:700}
+
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  footer a{color:var(--fg)}
+  @media (max-width:520px){
+    .nps{grid-template-columns:repeat(6,1fr)}
+    .rate-row{flex-wrap:wrap}
+    .hero{grid-template-columns:1fr;text-align:center}
+    .hero p{margin-inline:auto}
+    .mascot{margin:0 auto;order:-1}
+  }
+  @media (prefers-reduced-motion:reduce){.mascot,.thanks img{animation:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a href="./" aria-label="Blendo"><img src="assets/logo.webp" alt="Blendo IPTV" width="96" height="37"></a>
+    <button class="lang" id="langBtn" type="button">English</button>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h1 data-i="title">رأيك <span>بيعمل بليندو</span></h1>
+      <p data-i="sub">جرّبت التطبيق؟ قولّنا رأيك بصراحة في دقيقتين. كل كلمة بتوصلنا بنقراها، وبنحسّن بيها بليندو عشانك.</p>
+    </div>
+    <img class="mascot" src="assets/mascot.webp" alt="" width="240" height="260">
+  </section>
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+  <form id="f" novalidate>
+    <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="card">
+      <h2><span class="num">1</span><span data-i="q1">بتستخدم بليندو على إيه؟</span></h2>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="device" value="tv" required><span data-i="d_tv">تلفزيون / بوكس أندرويد</span></label>
+        <label class="chip"><input type="radio" name="device" value="phone"><span data-i="d_phone">موبايل</span></label>
+        <label class="chip"><input type="radio" name="device" value="both"><span data-i="d_both">الاتنين</span></label>
+      </div>
+      <input type="text" name="device_model" style="margin-top:10px" data-ph="ph_model" placeholder="نوع الجهاز (اختياري)">
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span><span data-i="q2">عرفت بليندو منين؟</span></h2>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="source" value="facebook"><span>Facebook</span></label>
+        <label class="chip"><input type="radio" name="source" value="telegram"><span>Telegram</span></label>
+                <label class="chip"><input type="radio" name="source" value="google_play"><span>Google Play</span></label>
+        <label class="chip"><input type="radio" name="source" value="friend"><span data-i="s_friend">صاحب / قريب</span></label>
+        <label class="chip"><input type="radio" name="source" value="other"><span data-i="s_other">حاجة تانية</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span><span data-i="q3">قيّم المميزات</span></h2>
+      <p class="hint" data-i="q3h">اضغط على النجوم. لو ما جربتش ميزة، علّم «ما جربتهاش».</p>
+      <div id="rates"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span><span data-i="q4">قابلت أي مشكلة؟</span></h2>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="had_problem" value="no"><span data-i="p_no">لا، كله تمام</span></label>
+        <label class="chip"><input type="radio" name="had_problem" value="yes"><span data-i="p_yes">أيوه</span></label>
+      </div>
+      <div id="probBox" class="hide" style="margin-top:12px">
+        <p class="hint" data-i="q4h">المشكلة كانت في إيه؟ (تقدر تختار أكتر من حاجة)</p>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="problem_area" value="add_server"><span data-i="a_add">إضافة السيرفر</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="live"><span data-i="a_live">القنوات</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="vod"><span data-i="a_vod">الأفلام والمسلسلات</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="player"><span data-i="a_player">المشغّل والتقطيع</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="remote"><span data-i="a_remote">الريموت</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="kids"><span data-i="a_kids">بروفايل الأطفال</span></label>
+          <label class="chip"><input type="checkbox" name="problem_area" value="other"><span data-i="s_other">حاجة تانية</span></label>
+        </div>
+        <textarea name="problem_text" style="margin-top:10px" data-ph="ph_problem" placeholder="احكيلنا حصل إيه بالظبط… (القناة، الجهاز، الوقت)"></textarea>
+
+        <div class="card aware" style="margin:12px 0 0">
+          <h2 data-i="aw_t">قبل ما تحكم… السيرفر حاجة والتطبيق حاجة تانية</h2>
+          <p class="hint" data-i="aw_p">القنوات والاشتراك من <b>مزوّد الخدمة</b> بتاعك، وبليندو هو <b>المشغّل</b>. لو القنوات وقفت أو بتقطّع، افتح «نبض البث» جوه المشغّل: هيقولك المشكلة من السيرفر ولا من النت.</p>
+          <p class="hint" style="margin:0" data-i="aw_q">نفس المشكلة بتحصل مع نفس الاشتراك على تطبيق تاني؟</p>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="other_app" value="yes"><span data-i="o_yes">أيوه، بتحصل برضه</span></label>
+            <label class="chip"><input type="radio" name="other_app" value="no"><span data-i="o_no">لا، في بليندو بس</span></label>
+            <label class="chip"><input type="radio" name="other_app" value="unknown"><span data-i="o_unk">ما جربتش</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span><span data-i="q5">عايز تشوف إيه في بليندو بعد كده؟</span></h2>
+      <textarea name="suggestions" data-ph="ph_sugg" placeholder="فكرة، ميزة، أو حاجة نحسّنها…"></textarea>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">6</span><span data-i="q6">ترشّح بليندو لصاحبك؟</span></h2>
+      <div class="nps" id="nps"></div>
+      <div class="nps-legend"><span data-i="n_lo">مستحيل</span><span data-i="n_hi">أكيد طبعاً</span></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">7</span><span data-i="q7">تحب نتواصل معاك؟ (اختياري)</span></h2>
+      <p class="hint" data-i="q7h">لو سبت إيميلك، هنتواصل معاك عليه بس عشان نتابع مشكلتك أو نبلغك بالتحديثات.</p>
+      <input type="email" name="contact" inputmode="email" autocomplete="email" data-ph="ph_contact" placeholder="الإيميل بتاعك" dir="ltr">
+    </div>
+
+    <button class="submit" id="send" type="submit" data-i="send">ابعت رأيك 🚀</button>
+    <p class="err" id="err" role="alert"></p>
+    <p class="fine"><span data-i="fine">Blendo مشغّل وسائط فقط ولا يوفّر أي محتوى. بنستخدم إجاباتك لتحسين التطبيق بس.</span>
+      <a href="privacy-policy.html" data-i="privacy">سياسة الخصوصية</a></p>
+  </form>
+
+  <section class="thanks hide" id="thanks" aria-live="polite">
+    <img src="assets/mascot.webp" alt="" width="240" height="260">
+    <h2 data-i="ty_t">وصلنا رأيك، متشكرين! 💜</h2>
+    <p data-i="ty_p">انتو اللي بتعملوا بليندو. كل ملاحظة هتتقرا، وهتلاقي أثرها في التحديثات الجاية.</p>
+    <a class="play" href="https://play.google.com/store/apps/details?id=com.blendo.iptv" data-i="ty_play">بليندو على جوجل بلاي</a>
+  </section>
+
+  <footer><a href="./" data-i="home">الرئيسية</a> · <a href="support.html" data-i="support">الدعم الفني</a></footer>
+</main>
+
+<script>
+// عنوان استقبال الإجابات (Google Apps Script) — يُملأ بعد النشر.
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbw2U3ZOw1iTv95-wxgqYzXoEJkoMwTOPgB0qjfjuOU_fEPUhBl7uMtFR7Vx24QyjaWS/exec';
+
+const FEATURES = [
+  ['f_add',   'إضافة السيرفر واختيار الشخصية', 'Adding a server & avatar'],
+  ['f_live',  'القنوات والمعاينة وسرعة التقليب', 'Live channels, preview & zapping'],
+  ['f_kids',  'بروفايل الأطفال', 'Kids profile'],
+  ['f_enh',   'تحسين الصورة', 'Picture enhancement'],
+  ['f_4k',    'سلاسة المشغّل وقنوات 4K', 'Player smoothness & 4K'],
+  ['f_vod',   'الأفلام والمسلسلات وكمّل المشاهدة', 'Movies, series & Continue watching'],
+  ['f_pulse', 'نبض البث', 'Stream pulse'],
+  ['f_tracks','الترجمة والتعليق الصوتي', 'Subtitles & audio tracks'],
+  ['f_look',  'شكل التطبيق وسهولته', 'Look & ease of use'],
+];
+const T = {
+  en: {
+    title:'Your voice <span>builds Blendo</span>', sub:'Tried the app? Tell us honestly in two minutes. We read every word and use it to make Blendo better for you.',
+    q1:'Where do you use Blendo?', d_tv:'TV / Android box', d_phone:'Phone', d_both:'Both', ph_model:'Device model (optional)',
+    q2:'How did you hear about Blendo?', s_friend:'Friend / family', s_other:'Something else',
+    q3:'Rate the features', q3h:'Tap the stars. If you didn’t try a feature, tick “Didn’t try”.', na:'Didn’t try',
+    q4:'Did you face any problem?', p_no:'No, all good', p_yes:'Yes', q4h:'Where was the problem? (pick any)',
+    a_add:'Adding a server', a_live:'Live channels', a_vod:'Movies & series', a_player:'Player & buffering', a_remote:'Remote control', a_kids:'Kids profile',
+    ph_problem:'Tell us exactly what happened… (channel, device, time)',
+    aw_t:'Before you judge… the server and the app are two different things',
+    aw_p:'Channels and the subscription come from <b>your provider</b>; Blendo is the <b>player</b>. If channels stop or buffer, open “Stream pulse” in the player: it tells you if it’s the server or your internet.',
+    aw_q:'Does the same problem happen with the same subscription in another app?', o_yes:'Yes, there too', o_no:'No, only in Blendo', o_unk:'Didn’t try',
+    q5:'What would you like to see in Blendo next?', ph_sugg:'An idea, a feature, or something to improve…',
+    q6:'Would you recommend Blendo to a friend?', n_lo:'Not at all', n_hi:'Absolutely',
+    q7:'Can we contact you? (optional)', q7h:'If you leave your email, we’ll only use it to follow up on your issue or tell you about updates.', ph_contact:'Your email',
+    send:'Send feedback 🚀', fine:'Blendo is a media player only and provides no content. We use your answers only to improve the app.', privacy:'Privacy policy',
+    ty_t:'Got it — thank you! 💜', ty_p:'You are the ones who build Blendo. Every note is read, and you’ll see it in the next updates.', ty_play:'Blendo on Google Play',
+    home:'Home', support:'Support', err_req:'Please choose where you use Blendo (question 1).', err_net:'Couldn’t send right now — check your internet and try again.'
+  }
+};
+const AR = {}; // يُلتقط من الصفحة نفسها عند التحميل
+let lang = 'ar';
+
+function buildRates(){
+  const box = document.getElementById('rates'); box.innerHTML = '';
+  for (const [k, ar, en] of FEATURES){
+    const row = document.createElement('div'); row.className = 'rate-row';
+    let stars = '';
+    for (let v = 5; v >= 1; v--) stars += `<input type="radio" id="${k}${v}" name="${k}" value="${v}"><label for="${k}${v}" title="${v}">★</label>`;
+    row.innerHTML = `<span>${lang==='en'?en:ar}</span><div style="display:flex;align-items:center"><div class="stars" role="radiogroup" aria-label="${lang==='en'?en:ar}">${stars}</div>
+      <label class="na"><input type="checkbox" name="${k}_na" value="1"> <span>${lang==='en'?T.en.na:'ما جربتهاش'}</span></label></div>`;
+    box.appendChild(row);
+  }
+}
+function buildNps(){
+  const box = document.getElementById('nps'); box.innerHTML = '';
+  for (let i = 0; i <= 10; i++) box.insertAdjacentHTML('beforeend', `<label><input type="radio" name="nps" value="${i}"><span>${i}</span></label>`);
+}
+function applyLang(){
+  document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const k = el.dataset.i; if (!(k in AR)) AR[k] = el.innerHTML;
+    el.innerHTML = lang === 'en' ? (T.en[k] ?? AR[k]) : AR[k];
+  });
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    const k = el.dataset.ph; if (!(('ph:'+k) in AR)) AR['ph:'+k] = el.placeholder;
+    el.placeholder = lang === 'en' ? (T.en[k] ?? AR['ph:'+k]) : AR['ph:'+k];
+  });
+  document.getElementById('langBtn').textContent = lang === 'ar' ? 'English' : 'العربية';
+  const keep = new FormData(document.getElementById('f'));
+  buildRates();
+  for (const [k] of FEATURES){
+    const v = keep.get(k); if (v) document.getElementById(k + v).checked = true;
+    if (keep.get(k + '_na')) document.querySelector(`[name="${k}_na"]`).checked = true;
+  }
+  progress();
+}
+function progress(){
+  const f = new FormData(document.getElementById('f'));
+  const keys = ['device','source','had_problem','nps', ...FEATURES.map(x=>x[0])];
+  let done = keys.filter(k => f.get(k) || f.get(k + '_na')).length;
+  if ((f.get('suggestions')||'').trim()) done++;
+  document.getElementById('bar').style.width = Math.min(100, done / (keys.length + 1) * 100) + '%';
+}
+
+document.getElementById('langBtn').addEventListener('click', () => { lang = lang === 'ar' ? 'en' : 'ar'; try{localStorage.setItem('blendo_lang', lang)}catch(e){}; applyLang(); });
+document.getElementById('f').addEventListener('change', e => {
+  if (e.target.name === 'had_problem') document.getElementById('probBox').classList.toggle('hide', e.target.value !== 'yes');
+  if (e.target.name.endsWith('_na') && e.target.checked){
+    document.querySelectorAll(`[name="${e.target.name.slice(0,-3)}"]`).forEach(r => r.checked = false);
+  } else if (FEATURES.some(x => x[0] === e.target.name)){
+    const na = document.querySelector(`[name="${e.target.name}_na"]`); if (na) na.checked = false;
+  }
+  progress();
+});
+document.getElementById('f').addEventListener('input', progress);
+
+document.getElementById('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const err = document.getElementById('err'); err.textContent = '';
+  const f = new FormData(e.target);
+  if (f.get('website')) return; // روبوت
+  if (!f.get('device')){ err.textContent = lang==='en' ? T.en.err_req : 'من فضلك اختار بتستخدم بليندو على إيه (سؤال 1).'; return; }
+  const em = (f.get('contact')||'').trim();
+  if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)){ err.textContent = lang==='en' ? 'Please check your email address.' : 'من فضلك اتأكد من الإيميل.'; return; }
+  const data = { lang, ua: navigator.userAgent.slice(0,180), page: 'survey-v1' };
+  for (const [k, v] of f.entries()){
+    if (k === 'website') continue;
+    data[k] = data[k] ? data[k] + ', ' + v : String(v).slice(0, 2000);
+  }
+  const btn = document.getElementById('send'); btn.disabled = true;
+  try{
+    await fetch(ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(data) });
+    document.getElementById('f').classList.add('hide');
+    document.getElementById('thanks').classList.remove('hide');
+    document.querySelector('.progress i').style.width = '100%';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }catch(_){
+    err.textContent = lang==='en' ? T.en.err_net : 'ما قدرناش نبعت دلوقتي — اتأكد من النت وجرّب تاني.';
+    btn.disabled = false;
+  }
+});
+
+try{ const s = localStorage.getItem('blendo_lang'); if (s === 'en') lang = 'en'; }catch(e){}
+if (new URLSearchParams(location.search).get('lang') === 'en') lang = 'en';
+buildNps(); buildRates(); applyLang();
+</script>
+</body>
+</html>
